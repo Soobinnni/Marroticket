@@ -1,6 +1,6 @@
 package com.marroticket.mapper;
 
-import com.marroticket.umember.play.domain.PlayVO;
+import com.marroticket.play.domain.PlayVO;
 
 public interface RegisteMapper {
 

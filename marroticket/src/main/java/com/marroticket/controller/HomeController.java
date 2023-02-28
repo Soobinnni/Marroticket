@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.marroticket.umember.play.domain.PlayVO;
-import com.marroticket.umember.play.service.PlayService;
+import com.marroticket.play.domain.PlayVO;
+import com.marroticket.play.service.PlayService;
 
 import org.springframework.ui.Model;
 

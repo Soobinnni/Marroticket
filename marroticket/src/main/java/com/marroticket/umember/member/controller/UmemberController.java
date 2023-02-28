@@ -37,8 +37,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.marroticket.umember.member.domain.UmemberVO;
 import com.marroticket.umember.member.service.UmemberService;
-import com.marroticket.umember.play.domain.PlayVO;
-import com.marroticket.umember.play.service.PlayService;
+import com.marroticket.play.domain.PlayVO;
+import com.marroticket.play.service.PlayService;
 import com.marroticket.umember.reservation.domain.ReservationVO;
 import com.marroticket.umember.reservation.service.ReservationService;
 

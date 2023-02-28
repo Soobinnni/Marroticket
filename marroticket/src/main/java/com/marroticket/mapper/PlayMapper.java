@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.marroticket.common.domain.PageRequest;
-import com.marroticket.umember.play.domain.PlayVO;
+import com.marroticket.play.domain.PlayVO;
 
 @Mapper
 public interface PlayMapper {

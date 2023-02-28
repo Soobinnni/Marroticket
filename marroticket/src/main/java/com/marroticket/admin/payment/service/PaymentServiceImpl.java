@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.marroticket.admin.payment.domain.PaymentVO;
 import com.marroticket.common.domain.PageRequest;
 import com.marroticket.mapper.PaymentMapper;
-import com.marroticket.umember.play.domain.PlayVO;
+import com.marroticket.play.domain.PlayVO;
 import com.marroticket.umember.reservation.domain.ReservationVO;
 
 @Service

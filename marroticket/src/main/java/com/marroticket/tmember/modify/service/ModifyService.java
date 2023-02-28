@@ -2,7 +2,7 @@ package com.marroticket.tmember.modify.service;
 
 import java.util.List;
 
-import com.marroticket.umember.play.domain.PlayVO;
+import com.marroticket.play.domain.PlayVO;
 
 public interface ModifyService {
 

@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.google.gson.Gson;
 import com.marroticket.umember.member.domain.UmemberVO;
 import com.marroticket.umember.member.service.UmemberService;
-import com.marroticket.umember.play.domain.PlayVO;
+import com.marroticket.play.domain.PlayVO;
 import com.marroticket.umember.reservation.domain.ReservationVO;
 import com.marroticket.umember.reservation.domain.SeatVO;
 import com.marroticket.umember.reservation.service.ReservationService;
