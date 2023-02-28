@@ -1,7 +1,0 @@
-package com.marroticket.common.email.service;
-
-import com.marroticket.common.email.vo.EmailVO;
-
-public interface EmailService {
-    public void sendUmemberEmail(EmailVO emailVO) throws Exception;
-}

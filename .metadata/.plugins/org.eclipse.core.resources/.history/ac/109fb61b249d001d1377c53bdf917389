@@ -1,5 +1,0 @@
-package com.marroticket.config;
-
-public class ThymeleafConfig {
-
-}

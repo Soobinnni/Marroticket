@@ -89,9 +89,13 @@ application-aws.properties
 
 # Uncomment this line if you wish to ignore the project description file.
 # Typically, this file would be tracked if it contains build/dependency configurations:
-#.project
+
 
 
 .DS_Store
 
 .idea
+HELP.md
+mvnw
+mvnw.cmd
+.project

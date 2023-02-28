@@ -1,5 +1,0 @@
-package com.marroticket.mapper;
-
-public interface TmemberMapper {
-
-}

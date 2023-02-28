@@ -1,9 +1,0 @@
-package com.marroticket.common.util.Repository;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.marroticket.umember.play.domain.PlayVO;
-
-public interface FileRepository extends JpaRepository<PlayVO, String> {
-	PlayVO findBypnumber(String pnumber);
-}

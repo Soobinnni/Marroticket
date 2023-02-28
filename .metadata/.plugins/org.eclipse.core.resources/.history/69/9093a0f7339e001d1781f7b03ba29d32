@@ -1,8 +1,0 @@
-package com.marroticket.mapper;
-
-import com.marroticket.tmember.member.vo.TmemberVO;
-
-public interface TmemberMapper {
-	 public String findId(TmemberVO tmember) throws Exception;
-	 public int findPassword(TmemberVO tmember) throws Exception;
-}
