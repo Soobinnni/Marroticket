@@ -93,18 +93,5 @@ application-aws.properties
 
 
 .DS_Store
-<<<<<<< HEAD
-/.metadata/
-=======
-<<<<<<< HEAD
-/.metadata/
-=======
-<<<<<<< HEAD
 
-/.metadata/
-
-=======
-/.metadata/
->>>>>>> main
->>>>>>> e2c1ecf281ce87bdbf52974b7132e97dc0639ee2
->>>>>>> soobin
+.idea
