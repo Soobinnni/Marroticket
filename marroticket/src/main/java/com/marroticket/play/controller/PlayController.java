@@ -1,4 +1,4 @@
-package com.marroticket.controller;
+package com.marroticket.play.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,97 +23,104 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.marroticket.play.domain.PlayVO;
 import com.marroticket.play.service.PlayService;
 
-import org.springframework.ui.Model;
-
+//@PreAuthorize("hasRole('ROLE_UMEMBER')")
+@RequestMapping("/play")
 @Controller
-public class HomeController {
+@MapperScan(basePackages = "com.marroticket.mapper")
+public class PlayController {
+
 	@Value("${upload.path}")
 	private String uploadPath;
 
 	@Autowired
 	private PlayService playService;
 
-	@GetMapping("/")
-	public String home(Model model) throws Exception {
+	// 현재 상연 페이지
+	@GetMapping("/playCurrentList")
+	public String playCurrentList(Model model) throws Exception {
 
-		List<PlayVO> playCurrentList = new ArrayList<>(); //상연 중
+		List<PlayVO> playCurrentList = new ArrayList<>();
 		playCurrentList = playService.playCurrentList();
 		model.addAttribute("playCurrentList", playCurrentList);
 
-		return "home";
+		return "play.playCurrentList";
 	}
 
-	// 회원가입
-	@GetMapping("/join")
-	public String joinChoose() {
-		return "joinChoose";
+	// 지난 상연 페이지
+	@GetMapping("/playPassList")
+	public String playPassList(Model model) throws Exception {
+
+		List<PlayVO> playPassList = new ArrayList<>();
+		playPassList = playService.playPassList();
+		model.addAttribute("playPassList", playPassList);
+
+		return "play.playPassList";
 	}
 
-	@GetMapping("/umemberJoinForm")
-	public String userJoin() {
-		return "uMemberJoin.umemberJoinForm";
+	// 상연 예정 페이지
+	@GetMapping("/playExpectedList")
+	public String playExpectedList(Model model) throws Exception {
+
+		List<PlayVO> playExpectedList = new ArrayList<>();
+		playExpectedList = playService.playExpectedList();
+		model.addAttribute("playExpectedList", playExpectedList);
+
+		return "play.playExpectedList";
 	}
 
-	@GetMapping("/tmemberJoinForm")
-	public String theaterJoin() {
-		return "tMemberJoin.tmemberJoinForm";
+	// 연극 공연 정보 상세 페이지
+	@GetMapping("/playDetail")
+	public String playDetail(Model model, int pNumber) throws Exception{
+		PlayVO play = playService.read(pNumber);
+		
+		//관람등급 set
+		play.setPratings(ratingSet(play));
+		//장르 정보 set
+		play.setPgenre(genreSet(play));
+		System.out.println(play);
+		
+		model.addAttribute("play", play);
+		return "playDetail";
 	}
 
-	// 회원 관련
-	@GetMapping("/loginChoose")
-	public String login() {
-		return "loginChoose";
-	}
+	// 연극 공연
 
-	// 아이디 찾기
-	@GetMapping("/memberFindId")
-	public String idFindChoose() {
-		return "memberFind.Id";
+	//관람등급 set
+	public String ratingSet(PlayVO play) {
+		switch (play.getPratings().charAt(0)) {
+		case '1':
+			return "전체";
+		case '2':
+			return "12세 이상";
+		case '3':
+			return "15세 이상";
+		case '4':
+			return "18세 이상";
+		default : 
+			return null;
+		}
 	}
-
-	// 비밀번호 찾기
-	@GetMapping("/memberFindPassword")
-	public String passwordFindChoose() {
-		return "memberFind.Password";
+	//장르정보 set
+	public String genreSet(PlayVO play) {
+		switch (play.getPgenre().charAt(0)) {
+		case '1':
+			return "로맨스극";
+		case '2':
+			return "코미디극";
+		case '3':
+			return "드라마극";
+		case '4':
+			return "공포극";
+		case '5':
+			return "추리스릴러극";
+		case '6':
+			return "판타지극";
+		case '7':
+			return "시대/역사극";
+		default:
+			return null;
+		}
 	}
-
-	// footer
-	@GetMapping("/privacy")
-	public String privacy() {
-		return "footer.privacy";
-	}
-
-	@GetMapping("/companyinfo")
-	public String companyinfo() {
-		return "footer.companyinfo";
-	}
-
-	@GetMapping("/umembertermsofuse")
-	public String umembertermsofuse(Model model) {
-		model.addAttribute("umember", "umember");
-		return "footer.umembertermsofuse";
-	}
-
-	@GetMapping("/tmembertermsofuse")
-	public String tmembertermsofuse(Model model) {
-		model.addAttribute("umember", "umember");
-		return "footer.tmembertermsofuse";
-	}
-
-	// 고객센터
-	// 일반회원 FAQ
-	// 목록
-	@GetMapping("/ufaqList")
-	public String ufaqList() {
-		return "serviceCenter.ufaqList";
-	}
-
-	// 일반회원 문의 사항
-	@GetMapping("/serviceCenter/otherInquiries")
-	public String otherInquiries() {
-		return "serviceCenter.otherInquiries";
-	}
-
 	// 포스터 표시
 	@ResponseBody
 	@RequestMapping("/poster")

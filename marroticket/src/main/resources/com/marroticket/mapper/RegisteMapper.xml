@@ -3,7 +3,7 @@
 <mapper namespace="com.marroticket.mapper.RegisteMapper">
 
 	<insert id="registe"
-		parameterType="com.marroticket.umember.play.domain.PlayVO">
+		parameterType="com.marroticket.play.domain.PlayVO">
 
 		insert into Play(
 		p_number ,

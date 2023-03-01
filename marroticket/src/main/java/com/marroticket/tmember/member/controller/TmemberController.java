@@ -51,8 +51,8 @@ import com.marroticket.common.email.service.EmailService;
 import com.marroticket.tmember.member.service.TmemberService;
 import com.marroticket.tmember.modify.service.ModifyService;
 import com.marroticket.tmember.registe.service.RegisteService;
-import com.marroticket.umember.play.domain.PlayVO;
-import com.marroticket.umember.play.service.PlayService;
+import com.marroticket.play.domain.PlayVO;
+import com.marroticket.play.service.PlayService;
 
 import lombok.extern.slf4j.Slf4j;
 

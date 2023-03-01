@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.marroticket.mapper.PlayMapper">
 	<resultMap id="play"
-		type="com.marroticket.umember.play.domain.PlayVO">
+		type="com.marroticket.play.domain.PlayVO">
 		<id property="pnumber" column="p_number" />
 		<result property="pname" column="p_name" />
 		<result property="pstartDate" column="P_STARTDATE" />
@@ -72,7 +72,7 @@
 	<!-- 연극 등록 승인 목록 (연극명 연극번호 극단번호 극단명 승인여부) -->
 	<!-- 페이징 요청 정보를 매개 변수로 받아 페이징 처리를 한 극단회원 승인 목록을 조회 -->
 	<select id="playApproveList"
-		resultType="com.marroticket.umember.play.domain.PlayVO">
+		resultType="com.marroticket.play.domain.PlayVO">
 <![CDATA[
 	SELECT p_number,
 		 	p_name,
@@ -108,7 +108,7 @@
 
 	<!-- 연극 상세 조회 -->
 	<select id="playDetail"
-		resultType="com.marroticket.umember.play.domain.PlayVO">
+		resultType="com.marroticket.play.domain.PlayVO">
 
 		SELECT *
 		FROM play
@@ -117,7 +117,7 @@
 
 	<!-- 연극 등록 승인 -->
 	<update id="playApprove"
-		parameterType="com.marroticket.umember.play.domain.PlayVO">
+		parameterType="com.marroticket.play.domain.PlayVO">
 		UPDATE play
 		SET p_registrationApproval = 1
 		WHERE p_number
@@ -127,7 +127,7 @@
 
 	<!-- 연극 등록 반려 -->
 	<update id="playReject"
-		parameterType="com.marroticket.umember.play.domain.PlayVO">
+		parameterType="com.marroticket.play.domain.PlayVO">
 		UPDATE play
 		SET p_registrationApproval = 2
 		WHERE p_number
@@ -137,7 +137,7 @@
 	<!--연극 수정 승인 목록 -->
 	<!-- 페이징 요청 정보를 매개 변수로 받아 페이징 처리를 한 극단회원 승인 목록을 조회 -->
 	<select id="playModifyList"
-		resultType="com.marroticket.umember.play.domain.PlayVO">
+		resultType="com.marroticket.play.domain.PlayVO">
 <![CDATA[
 	SELECT  p_number,
 			 p_name,
@@ -174,7 +174,7 @@
 
 	<!-- 연극 수정 승인 -->
 	<update id="playModify"
-		parameterType="com.marroticket.umember.play.domain.PlayVO">
+		parameterType="com.marroticket.play.domain.PlayVO">
 		UPDATE play
 		SET p_modifyApproval = 0
 		WHERE p_number =

@@ -55,7 +55,7 @@
 
 	<!-- PlayVO resultmap 정의 -->
 	<resultMap id="play"
-		type="com.marroticket.umember.play.domain.PlayVO">
+		type="com.marroticket.play.domain.PlayVO">
 		<id property="pnumber" column="p_number" />
 		<result property="pname" column="p_name" />
 		<result property="pstartDate" column="P_STARTDATE" />

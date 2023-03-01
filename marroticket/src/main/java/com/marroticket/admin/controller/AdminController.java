@@ -33,8 +33,8 @@ import com.marroticket.common.domain.Pagination;
 import com.marroticket.tmember.member.domain.TmemberVO;
 import com.marroticket.tmember.member.service.TmemberService;
 import com.marroticket.umember.member.service.UmemberService;
-import com.marroticket.umember.play.domain.PlayVO;
-import com.marroticket.umember.play.service.PlayService;
+import com.marroticket.play.domain.PlayVO;
+import com.marroticket.play.service.PlayService;
 import com.marroticket.umember.reservation.domain.ReservationVO;
 
 import lombok.extern.java.Log;
