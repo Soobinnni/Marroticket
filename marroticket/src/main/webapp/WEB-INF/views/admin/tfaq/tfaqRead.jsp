@@ -38,8 +38,16 @@
 		</button>
 
 	</sec:authorize>
-	<button type="submit" id="btnList">
-		<spring:message code="action.list" />
+
+	<sec:authorize
+		access="hasRole('ROLE_TMEMBER') or hasRole('ROLE_GUEST')">
+		<button type="submit" id="btnList">
+	</sec:authorize>
+	<sec:authorize
+		access="hasRole('ROLE_ADMIN')">
+		<button type="submit" id="btnListAdmin">
+	</sec:authorize>
+	<spring:message code="action.list" />
 	</button>
 </div>
 <script>
@@ -68,6 +76,9 @@
 		});
 		$("#btnList").on("click", function() {
 			self.location = "/tfaq/tfaqList";
+		});
+		$("#btnListAdmin").on("click", function() {
+			self.location = "/tfaq/tfaqList?accept=admin";
 		});
 	});
 	$(".header_gnb_link.board_manage").css({

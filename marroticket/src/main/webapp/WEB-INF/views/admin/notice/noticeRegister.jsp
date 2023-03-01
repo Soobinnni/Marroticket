@@ -19,7 +19,7 @@
 		});
 
 		$("#btnList").on("click", function() {
-			self.location = "noticeList";
+			self.location = "/notice/noticeList?accept=admin";
 		});
 	});
 	$(".header_gnb_link.board_manage").css({

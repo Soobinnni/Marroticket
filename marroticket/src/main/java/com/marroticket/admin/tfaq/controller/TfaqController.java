@@ -42,7 +42,7 @@ public class TfaqController {
 		service.register(tfaqVO);
 
 		rttr.addFlashAttribute("msg", "SUCCESS");
-		return "redirect:/tfaq/tfaqList";
+		return "redirect:/tfaq/tfaqList?accept=admin";
 	}
 
 	// 극단 FAQ 목록 페이지
@@ -95,10 +95,12 @@ public class TfaqController {
 
 	// 게시글 수정 페이지, 페이징 요청 정보를 매개변수로 받고 다시 뷰에 전달한다.
 	@RequestMapping(value = "/tfaqModify", method = RequestMethod.GET)
-	public void modifyForm(int tfaqNo, @ModelAttribute("pgrq") PageRequest pageRequest, Model model) throws Exception {
+	public String modifyForm(int tfaqNo, @ModelAttribute("pgrq") PageRequest pageRequest, Model model) throws Exception {
 
 		// 조회한 게시글 상세 정보를 뷰에 전달한다
 		model.addAttribute(service.read(tfaqNo));
+		
+		return "admin.tfaq.tfaqModify";
 	}
 
 	// 게시글 수정 처리, 페이징 요청 정보를 매개변수로 받고 다시 뷰에 전달한다.
@@ -111,7 +113,7 @@ public class TfaqController {
 		rttr.addAttribute("sizePerPage", pageRequest.getSizePerPage());
 		rttr.addFlashAttribute("msg", "SUCCESS");
 
-		return "redirect:/tfaq/tfaqList";
+		return "redirect:/tfaq/tfaqList?accept=admin";
 	}
 
 	// 게시글 삭제 처리, 페이징 요청 정보를 매개변수로 받고 다시 뷰에 전달한다.
@@ -123,7 +125,7 @@ public class TfaqController {
 		rttr.addAttribute("page", pageRequest.getPage());
 		rttr.addAttribute("sizePerPage", pageRequest.getSizePerPage());
 		rttr.addFlashAttribute("msg", "SUCCESS");
-		return "redirect:/tfaq/tfaqList";
+		return "redirect:/tfaq/tfaqList?accept=admin";
 
 	}
 

@@ -28,9 +28,11 @@ public class UfaqController {
 
 	// 극단 FAQ 등록 페이지
 	@RequestMapping(value = "/ufaqRegister", method = RequestMethod.GET)
-	public void registerForm(Model model, Authentication authentication) throws Exception {
+	public String registerForm(Model model, Authentication authentication) throws Exception {
 		UfaqVO ufaqVO = new UfaqVO();
 		model.addAttribute(ufaqVO);
+		
+		return "admin.ufaq.ufaqRegister";
 	}
 
 	// 극단 FAQ 등록처리
@@ -39,7 +41,7 @@ public class UfaqController {
 		service.register(ufaqVO);
 
 		rttr.addFlashAttribute("msg", "SUCCESS");
-		return "redirect:/ufaq/ufaqList";
+		return "redirect:/ufaq/ufaqList?accept=admin";
 	}
 
 	// 페이징 요청 정보를 매개변수로 받고 다시 뷰에 전달한다.
@@ -86,10 +88,11 @@ public class UfaqController {
 
 	// 게시글 수정 페이지, 페이징 요청 정보를 매개변수로 받고 다시 뷰에 전달한다.
 	@RequestMapping(value = "/ufaqModify", method = RequestMethod.GET)
-	public void modifyForm(int ufaqNo, @ModelAttribute("pgrq") PageRequest pageRequest, Model model) throws Exception {
+	public String modifyForm(int ufaqNo, @ModelAttribute("pgrq") PageRequest pageRequest, Model model) throws Exception {
 
 		// 조회한 게시글 상세 정보를 뷰에 전달한다
 		model.addAttribute(service.read(ufaqNo));
+		return "admin.ufaq.ufaqModify";
 	}
 
 	// 게시글 수정 처리, 페이징 요청 정보를 매개변수로 받고 다시 뷰에 전달한다.
@@ -102,7 +105,7 @@ public class UfaqController {
 		rttr.addAttribute("sizePerPage", pageRequest.getSizePerPage());
 		rttr.addFlashAttribute("msg", "SUCCESS");
 
-		return "redirect:/ufaq/ufaqList";
+		return "redirect:/ufaq/ufaqList?accept=admin";
 	}
 
 	// 게시글 삭제 처리, 페이징 요청 정보를 매개변수로 받고 다시 뷰에 전달한다.
@@ -115,7 +118,7 @@ public class UfaqController {
 		rttr.addAttribute("sizePerPage", pageRequest.getSizePerPage());
 		rttr.addFlashAttribute("msg", "SUCCESS");
 
-		return "redirect:/ufaq/ufaqList";
+		return "redirect:/ufaq/ufaqList?accept=admin";
 
 	}
 

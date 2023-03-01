@@ -29,11 +29,12 @@ public class NoticeController {
 
 	// 공지사항 등록 페이지
 	@RequestMapping(value = "/noticeRegister", method = RequestMethod.GET)
-	public void registerForm(Model model) throws Exception {
+	public String registerForm(Model model) throws Exception {
 		System.out.println("공지사항 등록");
 		NoticeVO noticeVO = new NoticeVO();
 
 		model.addAttribute(noticeVO);
+		return "admin.notice.noticeRegister";
 	}
 
 	// 공지사항 등록 처리
@@ -45,7 +46,7 @@ public class NoticeController {
 		rttr.addFlashAttribute("msg", "SUCCESS");
 		System.out.println("공지사항 등록 처리");
 
-		return "redirect:/notice/noticeList";
+		return "redirect:/notice/noticeList?accept=admin";
 	}
 
 	// 공지사항 목록 페이지
@@ -95,12 +96,13 @@ public class NoticeController {
 
 	// 공지사항 수정 페이지
 	@RequestMapping(value = "/noticeModify", method = RequestMethod.GET)
-	public void modifyForm(int noticeNo, @ModelAttribute("pgrq") PageRequest pageRequest, Model model)
+	public String modifyForm(int noticeNo, @ModelAttribute("pgrq") PageRequest pageRequest, Model model)
 			throws Exception {
 
 		// 조회한 게시글 상세 정보를 뷰에 전달한다.
 		model.addAttribute(service.read(noticeNo));
 		System.out.println("공지사항 수정");
+		return "notice/modify/noticeModify";
 	}
 
 	// 공지사항 수정 처리
@@ -114,7 +116,7 @@ public class NoticeController {
 		rttr.addFlashAttribute("msg", "SUCCESS");
 		System.out.println("공지사항 수정처리");
 
-		return "redirect:/notice/noticeList";
+		return "redirect:/notice/noticeList?accept=admin";
 	}
 
 	// 공지사항 삭제 처리
@@ -129,6 +131,6 @@ public class NoticeController {
 		rttr.addFlashAttribute("msg", "SUCCESS");
 		System.out.println("공지사항 삭제처리");
 
-		return "redirect:/notice/noticeList";
+		return "redirect:/notice/noticeList?accept=admin";
 	}
 }

@@ -40,8 +40,14 @@
 		</button>
 
 	</sec:authorize>
-	<button type="submit" id="btnList">
-		<spring:message code="action.list" />
+	<sec:authorize
+		access="hasRole('ROLE_TMEMBER') or hasRole('ROLE_GUEST')">
+		<button type="submit" id="btnList" class="list_btn">
+	</sec:authorize>
+	<sec:authorize access="hasRole('ROLE_ADMIN')">
+		<button type="submit" id="btnListAdmin" class="list_btn">
+	</sec:authorize>
+	<spring:message code="action.list" />
 	</button>
 
 </div>
@@ -72,6 +78,9 @@
 		});
 		$("#btnList").on("click", function() {
 			self.location = "/notice/noticeList";
+		});
+		$("#btnListAdmin").on("click", function() {
+			self.location = "/notice/noticeList?accept=admin";
 		});
 	});
 	$(".header_gnb_link.board_manage").css({

@@ -19,7 +19,7 @@
 		});
 		
 		$("#btnList").on("click", function() {
-			self.location = "tfaqList";
+			self.location = "/tfaq/tfaqList?accept=admin";
 		});
 	});
 	$(".header_gnb_link.board_manage").css({

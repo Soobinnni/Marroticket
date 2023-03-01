@@ -56,7 +56,7 @@
 	<definition name="play.*" extends="main-template">
 		<put-attribute name="title" value="마로티켓 연극공연정보" />
 		<put-attribute name="content"
-			value="/WEB-INF/views/umember/play/{1}.jsp" />
+			value="/WEB-INF/views/play/{1}.jsp" />
 	</definition>
 
 	<!-- footer -->
@@ -130,32 +130,32 @@
 	<definition name="play.*" extends="main-template">
 		<put-attribute name="title" value="마로티켓 연극 공연 정보" />
 		<put-attribute name="content"
-			value="/WEB-INF/views/umember/play/{1}.jsp" />
+			value="/WEB-INF/views/play/{1}.jsp" />
 	</definition>
 
 	<!-- play : 상세페이지 탐플렛 -->
 	<definition name="play-template"
-		template="/WEB-INF/tiles/layouts/umember/play/play_template.jsp">
+		template="/WEB-INF/tiles/layouts/play/play_template.jsp">
 		<put-attribute name="title" value="연극 공연 상세페이지" />
 		<put-attribute name="header"
-			value="/WEB-INF/tiles/components/umember/play/header.jsp" />
+			value="/WEB-INF/tiles/components/play/header.jsp" />
 		<put-attribute name="logo"
-			value="/WEB-INF/tiles/components/umember/play/logo.jsp" />
+			value="/WEB-INF/tiles/components//play/logo.jsp" />
 		<put-attribute name="menu"
-			value="/WEB-INF/tiles/components/umember/play/menu.jsp" />
+			value="/WEB-INF/tiles/components//play/menu.jsp" />
 		<put-attribute name="footer"
-			value="/WEB-INF/tiles/components/umember/play/footer.jsp" />
+			value="/WEB-INF/tiles/components//play/footer.jsp" />
 	</definition>
 	<!-- 연극 공연 상세 페이지 -->
 	<definition name="playDetail" extends="play-template">
 		<put-attribute name="content_poster"
-			value="/WEB-INF/views/umember/play/detail/poster.jsp" />
+			value="/WEB-INF/views//play/detail/poster.jsp" />
 		<put-attribute name="content_playInfo"
-			value="/WEB-INF/views/umember/play/detail/playInfo.jsp" />
+			value="/WEB-INF/views//play/detail/playInfo.jsp" />
 		<put-attribute name="content_ticketingInfo"
-			value="/WEB-INF/views/umember/play/detail/ticketingInfo.jsp" />
+			value="/WEB-INF/views//play/detail/ticketingInfo.jsp" />
 		<put-attribute name="content_detail"
-			value="/WEB-INF/views/umember/play/detail/playDetail.jsp" />
+			value="/WEB-INF/views//play/detail/playDetail.jsp" />
 	</definition>
 
 
@@ -218,7 +218,7 @@
 	<definition name="play.*" extends="main-template">
 		<put-attribute name="title" value="마로티켓 연극공연정보" />
 		<put-attribute name="content"
-			value="/WEB-INF/views/umember/play/{1}.jsp" />
+			value="/WEB-INF/views//play/{1}.jsp" />
 	</definition>
 
 	<!-- footer -->
@@ -277,7 +277,7 @@
 	<definition name="play.*" extends="main-template">
 		<put-attribute name="title" value="마로티켓 연극공연정보" />
 		<put-attribute name="content"
-			value="/WEB-INF/views/umember/play/{1}.jsp" />
+			value="/WEB-INF/views//play/{1}.jsp" />
 	</definition>
 
 	<!-- footer -->
@@ -316,6 +316,11 @@
 
 	<!-- 공지사항 페이지에 대한 레이아웃 템플릿 구성 요소 -->
 	<definition name="notice/*" extends="admin-template">
+		<put-attribute name="title" value="공지사항" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/admin/notice/{1}.jsp" />
+	</definition>
+	<definition name="notice/modify/*" extends="admin-template">
 		<put-attribute name="title" value="공지사항" />
 		<put-attribute name="content"
 			value="/WEB-INF/views/admin/notice/{1}.jsp" />

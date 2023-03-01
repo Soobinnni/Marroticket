@@ -19,7 +19,7 @@
 		});
 		
 		$("#btnList").on("click", function() {
-			self.location = "ufaqList";
+			self.location = "/ufaq/ufaqList?accept=admin";
 		});
 	});
 	$(".header_gnb_link.board_manage").css({

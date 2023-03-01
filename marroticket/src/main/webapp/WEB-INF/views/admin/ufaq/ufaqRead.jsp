@@ -42,8 +42,13 @@
 			</button>
 
 		</sec:authorize>
-		<button type="submit" id="btnList" class="list_btn">
-			<spring:message code="action.list" />
+		<sec:authorize access="isAnonymous() or hasRole('ROLE_UMEMBER')">
+			<button type="submit" id="btnList" class="list_btn">
+		</sec:authorize>
+		<sec:authorize access="hasRole('ROLE_ADMIN')">
+			<button type="submit" id="btnListAdmin" class="list_btn">
+		</sec:authorize>
+		<spring:message code="action.list" />
 		</button>
 	</div>
 </div>
@@ -72,6 +77,9 @@
 		});
 		$("#btnList").on("click", function() {
 			self.location = "/ufaq/ufaqList";
+		});
+		$("#btnListAdmin").on("click", function() {
+			self.location = "/ufaq/ufaqList?accept=admin";
 		});
 	});
 	$(".header_gnb_link.board_manage").css({

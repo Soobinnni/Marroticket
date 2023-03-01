@@ -8,8 +8,8 @@
 	uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-<c:set var="next" value="${pagination.endPage +1}"/>
-<c:set var="pre" value="${pagination.startPage - 1}"/>
+<c:set var="next" value="${pagination.endPage +1}" />
+<c:set var="pre" value="${pagination.startPage - 1}" />
 
 <!-- CSS only -->
 <!-- <link
@@ -82,10 +82,19 @@ div.pag {
 
 					<tr>
 						<td align="center" scope="row">${noticeVO.noticeNo}</td>
+
 						<!-- 게시글 상세보기할 때 페이징 요청 정보를 매개변수로 전달한다. -->
-						<td align="center" scope="row"><a
-							href="/notice/noticeRead${pagination.makeQuery(pagination.pageRequest.page)}&noticeNo=
+						<sec:authorize
+							access="hasRole('ROLE_TMEMBER') or hasRole('ROLE_GUEST')">
+							<td align="center" scope="row"><a
+								href="/notice/noticeRead${pagination.makeQuery(pagination.pageRequest.page)}&noticeNo=
 ${noticeVO.noticeNo}">${noticeVO.title}</a></td>
+						</sec:authorize>
+						<sec:authorize access="hasRole('ROLE_ADMIN')">
+							<td align="center" scope="row"><a
+								href="/notice/noticeRead${pagination.makeQuery(pagination.pageRequest.page)}&accept=admin&noticeNo=
+${noticeVO.noticeNo}">${noticeVO.title}</a></td>
+						</sec:authorize>
 						<td align="center" scope="row"><fmt:formatDate
 								pattern="yyyy-MM-dd HH:mm" value="${noticeVO.regDate}" /></td>
 					</tr>
@@ -102,17 +111,36 @@ ${noticeVO.noticeNo}">${noticeVO.title}</a></td>
 
 <div class="pag" align="center">
 	<c:if test="${pagination.prev}">
-		<a href="/notice/noticeList${pagination.makeQuery(pre)}">&laquo;</a>
+		<sec:authorize
+			access="hasRole('ROLE_TMEMBER') or hasRole('ROLE_GUEST')">
+			<a href="/notice/noticeList${pagination.makeQuery(pre)}">&laquo;</a>
+		</sec:authorize>
+		<sec:authorize access="hasRole('ROLE_ADMIN')">
+			<a href="/notice/noticeList${pagination.makeQuery(pre)}&accept=admin">&laquo;</a>
+		</sec:authorize>
 	</c:if>
 
 	<c:forEach begin="${pagination.startPage }"
 		end="${pagination.endPage }" var="idx">
-
+		<sec:authorize
+			access="hasRole('ROLE_TMEMBER') or hasRole('ROLE_GUEST')">
 		<a href="/notice/noticeList${pagination.makeQuery(idx)}">${idx}</a>
+		</sec:authorize>
+		<sec:authorize
+			access="hasRole('ROLE_ADMIN')">
+		<a href="/notice/noticeList${pagination.makeQuery(idx)}&accept=admin">${idx}</a>
+		</sec:authorize>
 	</c:forEach>
 
 	<c:if test="${pagination.next && pagination.endPage > 0}">
+		<sec:authorize
+			access="hasRole('ROLE_TMEMBER') or hasRole('ROLE_GUEST')">
 		<a href="/notice/noticeList${pagination.makeQuery(next)}">&raquo;</a>
+		</sec:authorize>
+		<sec:authorize
+			access="hasRole('ROLE_ADMIN')">
+		<a href="/notice/noticeList${pagination.makeQuery(next)}&accept=admin">&raquo;</a>
+		</sec:authorize>
 	</c:if>
 </div>
 <script>
@@ -121,7 +149,7 @@ ${noticeVO.noticeNo}">${noticeVO.title}</a></td>
 		alert("<spring:message code='common.processSuccess' />");
 	}
 	$(".header_gnb_link.board_manage").css({
-	    'color': '#EB0000',
-	    'font-weight': 'bold'
-		});
+		'color' : '#EB0000',
+		'font-weight' : 'bold'
+	});
 </script>
