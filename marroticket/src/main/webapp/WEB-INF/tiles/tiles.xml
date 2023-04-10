@@ -156,6 +156,8 @@
 			value="/WEB-INF/views//play/detail/ticketingInfo.jsp" />
 		<put-attribute name="content_detail"
 			value="/WEB-INF/views//play/detail/playDetail.jsp" />
+		<put-attribute name="content_seat_recommendations"
+			value="/WEB-INF/views/play/detail/seat_recommendations.jsp" />
 	</definition>
 
 
