@@ -296,6 +296,7 @@ $(document)
 			});
 			$(document).on("click", ".event", function() {
 				$('.marro_bot_service_start').empty();
+				$(".seat_recommendations").hide();
 				$('.event').css({
 					'background-color': 'white',
 					'color': 'black'
@@ -339,7 +340,7 @@ $(document)
 					'margin-top': '10px'
 				});
 				$('.play_seat_remain').html($('input[name=firstTimeSeatInfo]').val());
-				$('.seat_recommendations_btn').html('<img src="/images/챗봇셀렉.png" width="20px" style="margin-top:6px;"><span style="cursor:pointer;color:#EB0000;font-weight:bold;font-size:15px;">마로봇에게 자리추천받기 ▼</span>');
+				$('.seat_recommendations_btn').html('<img src="/images/챗봇셀렉.png" width="20px" style="margin-top:6px;"><span style="cursor:pointer;color:#EB0000;font-weight:bold;font-size:15px;">마로봇 이용하기 ▼</span>');
 			});
 			$(document).on("click", "#play_time_btn_second", function() {
 				$('#turnInfoHidden').empty();
@@ -354,7 +355,7 @@ $(document)
 					'border': '#ecedf2 solid 1px'
 				});
 				$('.play_seat_remain').html($('input[name=secondTimeSeatInfo]').val());
-				$('.seat_recommendations_btn').html('<img src="/images/챗봇셀렉.png" width="20px" style="margin-top:6px;"><span class="" style="cursor:pointer;color:#EB0000;font-weight:bold;font-size:15px;">마로봇에게 자리추천받기 ▼</span>');
+				$('.seat_recommendations_btn').html('<img src="/images/챗봇셀렉.png" width="20px" style="margin-top:6px;"><span class="" style="cursor:pointer;color:#EB0000;font-weight:bold;font-size:15px;">마로봇 이용하기 ▼</span>');
 			});
 
 
@@ -413,7 +414,7 @@ $(document)
 						//1회차 좌석 정보(예매가능좌석수)
 						$(".play_time").html("1회차 " + $('input[name=pfirstStartTime]').val());
 						$('.play_seat_remain').html(result["first"]);
-						$('.seat_recommendations_btn').html('<img src="/images/챗봇셀렉.png" width="20px" style="margin-top:6px;"><span style="cursor:pointer;color:#EB0000;font-weight:bold;font-size:15px;">마로봇에게 자리추천받기 ▼</span>');
+						$('.seat_recommendations_btn').html('<img src="/images/챗봇셀렉.png" width="20px" style="margin-top:6px;"><span style="cursor:pointer;color:#EB0000;font-weight:bold;font-size:15px;">마로봇 이용하기 ▼</span>');
 				
 						switch (result["second"]) {
 							case 100:

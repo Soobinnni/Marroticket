@@ -88,6 +88,24 @@ public class ReservationController {
 	}
 	
 	//마로티켓 봇 기능
+	// 좌석 정보 제공
+	@PostMapping("/readSeatInfo")
+	public ResponseEntity<List<String>> readSeatInfo(@RequestBody ReservationVO vo) throws Exception {
+		System.out.println(vo);
+		List<SeatVO> playReserveList =  getReserveList(getTicketNum(vo.getPdate(), vo.getPnumber(),vo.getPturn(),""));;// 공연 예매된 티켓번호 List
+		List<String> playReserveSeatsNumList = new ArrayList<>();// 좌석번호 List
+		
+		for (String reserveSeat : getReserveSeats(playReserveList)) {
+			reserveSeat = reserveSeat.substring((reserveSeat.length() - 2), reserveSeat.length());
+			playReserveSeatsNumList.add(reserveSeat);
+		}
+
+		System.out.println(playReserveSeatsNumList); 
+		
+		ResponseEntity<List<String>> entity = new ResponseEntity<>(playReserveSeatsNumList, HttpStatus.OK);
+		return entity;
+	}
+	
 	@PostMapping("/recommendSeat")
 	public ResponseEntity<List<String>> recommendSeat(@RequestBody ReservationVO vo) throws Exception {
 		System.out.println(vo);

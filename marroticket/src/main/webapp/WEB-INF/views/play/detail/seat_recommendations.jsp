@@ -11,16 +11,18 @@
 		<div class="marro_bot">
 			<img src="/images/챗봇.png">
 			<p>
-				<strong>안녕하세요!<br>마로티켓 좌석추천 서비스입니다.<br>서비스를
-					선택해주세요!
+				<strong>안녕하세요!<br>
+						마로티켓 좌석추천 서비스 마로봇입니다.<br><br>
+						마로봇은 예매 좌석을 추천할 수도, 예매하고자하는 좌석의 예매 여부를 확인할 수도 있습니다.<br><br>
+						이용하고자하는 서비스를 선택해주세요.
 				</strong>
 			</p>
 			<div style="margin-top: 20px;">
-				<span class="remainSeatsNum"
-					style='cursor: pointer; display: inline-block; border-radius: 5px; background-color: red; min-width: 30px; height: 25px; color: white; padding: 4px 8px 0;'
-					align="center"><strong>잔여 좌석번호 정보 확인</strong></span> <span
+				<span class="recommendSeatsNum"
+					style='cursor: pointer; display: inline-block; border-radius: 5px; background-color: #EB0000; min-width: 30px; height: 25px; color: white; padding: 4px 8px 0;'
+					align="center"><strong>좌석 추천</strong></span> <span class="checkSeatsNum"
 					style='cursor: pointer; display: inline-block; border-radius: 5px; background-color: #d9d9d9; min-width: 30px; height: 25px; color: black; padding: 4px 8px 0;'
-					align="center"><strong>좌석 추천</strong></span>
+					align="center"><strong>좌석 예매 정보 확인</strong></span>
 			</div>
 		</div>
 		<div class="clear"></div>
@@ -53,9 +55,15 @@
 						
 						//숨기기
 						$(".seat_recommendations").hide();
+						
+						//마로봇 응답
+						var marrobot_response_tag = '<div class="marro_bot" style="margin-top:30px;margin-bottom:10px;"><img src="/images/챗봇.png"><p><strong></strong></p><div class="clear"></div>';
 
 						//사용자 응답
-						var user_input_tag = "<div class='user-input'></div><div class='clear'></div>";
+						var user_input_tag = "<div class='user-input'><p></p><img src='/images/send.png'></div><div class='clear'></div>";
+
+						//종료 응답
+						var marrobot_ending_tag="<div><img src='/images/마로티켓 로고 2.png' style='display:block; margin:0 auto; padding-top:30px; width:120px;'><img src='/images/refresh.png' style='display:block; margin:0 auto; padding-top:10px; width:35px; cursor:pointer' class='marrobot_ending_tag'></div>";
 
 /* 						$("form")
 								.submit(
@@ -101,7 +109,7 @@
 									.done(
 											function(response) {
 												var chatGPTResponse = response.choices[0].text;
-												$("#chat")
+												$(".marro_bot_service_start")
 														.append(
 																"<div id='chat'><div class='marro_bot'><img src='/images/챗봇.png'><p>"
 																		+ chatGPTResponse
@@ -117,36 +125,156 @@
 						//클릭 이벤트
 						$(document).on("click", ".seat_recommendations_btn span",
 								function(e) {
-									e.preventDefault();
-									$(".seat_recommendations").show();
-									$('.play_reserve_seat').css({
-										'padding':'15px 0 10px 20px'
-									});
+								e.preventDefault();
+								$(".seat_recommendations").show();
+								 $(".recommendSeatsNum").animate({ opacity: 0 }, 400, function() {
+									    $(this).animate({ opacity: 1 }, 900);
+									  });
+								 $(".checkSeatsNum").animate({ opacity: 0 }, 400, function() {
+									    $(this).animate({ opacity: 1 }, 900);
+									  });
+								
+								$('.play_reserve_seat').css( {
+									'padding':'15px 0 10px 20px'
+								});
 								});
 						
-						$(document).on("click", ".remainSeatsNum", function(e) {
+						//좌석 추천 기능
+						$(document).on("click", ".recommendSeatsNum", function(e) {
 								e.preventDefault();
-								var pdateVal = $('input[name=reserveDateInfo]').val();
-								var pnumberVal = $('input[name=pnumber]').val();
-								var pturnVal = $('input[name=turnInfo]').val();
-								var pseatNumberVal = $('input[name=pseatNumber]').val();
-								
-								var pinfoJSON = {
-										"pdate" : pdateVal,
-										"pnumber" : pnumberVal,
-										"pturn" : pturnVal,
-										"pseatNumber" : pseatNumberVal
-										}
 								//ajax
-								$.ajax({
-									type: "post",
-									url: "/reserve/recommendSeat",
-									data: JSON.stringify(pinfoJSON),
-									contentType: "application/json; charset=utf-8",
-									success: function(result) {
-										console.log(result);
-									}
-								});
+								readSeatInfoAjax().then(function(response) {
+									//ajax통신에 성공했을 때
+									  var myData = response;
+									  console.log(myData);
+									});
 						});
+						
+						//좌석 확인 기능
+						$(document).on("click", ".checkSeatsNum", function(e) {
+							e.preventDefault();
+							$(this).disabled = false;
+							$(".marro_bot_service_start").append(marrobot_response_tag);
+							const seatNumbers = generateSeatNumbers($('input[name=pseatNumber]').val());
+							const seatSelectBox = createSeatSelectBox(seatNumbers);
+
+							$(".marro_bot:last p strong").append("확인하는 좌석을 선택해주세요.");
+							
+							$(".marro_bot_service_start").append(user_input_tag);
+							$(".user-input:last p").append(seatSelectBox);
+
+						});
+						
+						$(document).on("click", ".user-input img", function(e) {
+							e.preventDefault();
+							//ajax
+							readSeatInfoAjax().then(function(response) {
+								//ajax통신에 성공했을 때
+								var selectSeatNum = $(".select_seat_num").val(); //선택좌석
+								var reservedSeatNumList = response; //예매좌석
+								var found = false;
+								
+								//좌석 일치 확인
+								$.each(reservedSeatNumList, function(index, item) {
+								  if (item === selectSeatNum) { // 예매 불가
+								    found = true;
+								  //예매 불가능 알림 & 자리 추천
+									$(".marro_bot_service_start").append(marrobot_response_tag);
+									$(".marro_bot:last p strong").append("이미 예매된 좌석입니다.<br>대신, 마로봇이 새로운 좌석을 추천해드릴게요!");
+								    return false;
+								  }
+								});
+								if (!found) { // 예매 가능
+									$(".marro_bot_service_start").append(marrobot_response_tag);
+									$(".marro_bot:last p strong").append("예매가 가능한 좌석입니다!");
+									$(".marro_bot_service_start").append(marrobot_ending_tag);
+								}
+								
+							});
+						});
+						//refresh를 눌렀을 때
+						$(document).on("click", ".marrobot_ending_tag", function(e) {
+							e.preventDefault();
+							$('.marro_bot_service_start').empty();
+							 $(".recommendSeatsNum").animate({ opacity: 0 }, 400, function() {
+								    $(this).animate({ opacity: 1 }, 900);
+								  });
+							 $(".checkSeatsNum").animate({ opacity: 0 }, 400, function() {
+								    $(this).animate({ opacity: 1 }, 900);
+								  });
+						});
+						
+						
+						//함수
+						function generateSeatNumbers(numSeats) {
+							  const alphabet = "abcdefghijklmnopqrstuvwxyz";
+							  let seatNumbers = [];
+
+							  for (let i = 0; i < numSeats; i++) {
+							    const letter = alphabet[Math.floor(i / 9)];
+							    const number = i % 9 + 1;
+							    const seatNumber = letter + number;
+							    seatNumbers.push(seatNumber);
+							  }
+
+							  return seatNumbers;
+							}
+						function createSeatSelectBox(seatNumbers) {
+							  const selectBox = $("<select class='select_seat_num'>");
+							  const seatOptions = {};
+
+							  // 좌석번호를 알파벳과 숫자로 분리하고, 중복된 알파벳을 제거.
+							  seatNumbers.forEach((seatNumber) => {
+							    const letter = seatNumber[0];
+							    const number = seatNumber.slice(1);
+
+							    if (!seatOptions[letter]) {
+							      seatOptions[letter] = [];
+							    }
+
+							    seatOptions[letter].push(number);
+							  });
+
+							  // 알파벳별로 option그룹을 생성
+							  for (const letter in seatOptions) {
+							    const optionGroup = $("<optgroup>");
+							    optionGroup.attr("label", letter.toUpperCase());
+
+							    seatOptions[letter].forEach((number) => {
+							      const option = $("<option>");
+							      option.attr("value", letter + number);
+							      option.text(letter + number);
+							      optionGroup.append(option);
+							    });
+
+							    selectBox.append(optionGroup);
+							  }
+
+							  return selectBox;
+							}
+						//좌석정보 ajax 통신
+						function readSeatInfoAjax(callback) {
+						    //통신에 필요한 변수
+						    var pdateVal = $('input[name=reserveDateInfo]').val();
+						    var pnumberVal = $('input[name=pnumber]').val();
+						    var pturnVal = $('input[name=turnInfo]').val();
+						    var pinfoJSON = {
+						        "pdate" : pdateVal,
+						        "pnumber" : pnumberVal,
+						        "pturn" : pturnVal
+						    }
+						    return new Promise(function(resolve) { // Promise 객체 생성
+						        //ajax
+						        $.ajax({
+						            type: "post",
+						            url: "/reserve/readSeatInfo",
+						            data: JSON.stringify(pinfoJSON),
+						            contentType: "application/json; charset=utf-8",
+						            success: function(response) {
+						                resolve(response); // 비동기 처리 결과 값을 반환
+						            }
+						        });
+						    }); // 닫는 괄호 추가
+						}
 					});
 </script>
