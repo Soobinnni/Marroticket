@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" isELIgnored="false"%>
-<section class="play_place">
+<%-- <section class="play_place">
 	<div class="play_place_header">
 		<h2 class="play_place_h2" style="font-size: 2em; margin-top: 60px">공연장
 			정보</h2>
@@ -74,4 +74,4 @@
 						});
 
 	}
-</script>
+</script> --%>
