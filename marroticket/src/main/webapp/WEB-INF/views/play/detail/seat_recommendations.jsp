@@ -60,7 +60,8 @@
 						var marrobot_response_tag = '<div class="marro_bot" style="margin-top:30px;margin-bottom:10px;"><img src="/images/챗봇.png"><p><strong></strong></p><div class="clear"></div>';
 
 						//사용자 응답
-						var user_input_tag = "<div class='user-input'><p></p><img src='/images/send.png'></div><div class='clear'></div>";
+						var check_user_input_tag = "<div class='user-input'><p></p><img id='check_seatNum' src='/images/send.png'></div><div class='clear'></div>"; //예매확인
+						var recommend_user_input_tag = "<div class='user-input'><p></p><img id='recommend_seatNum' src='/images/send.png'></div><div class='clear'></div>"; //좌석추천
 
 						//종료 응답
 						var marrobot_ending_tag="<div><img src='/images/마로티켓 로고 2.png' style='display:block; margin:0 auto; padding-top:30px; width:120px;'><img src='/images/refresh.png' style='display:block; margin:0 auto; padding-top:10px; width:35px; cursor:pointer' class='marrobot_ending_tag'></div>";
@@ -79,48 +80,6 @@
 																	+ "</p></div>");
 											getChatGPTResponse(userInput);
 										}); */
-
-						function getChatGPTResponse(userInput) {
-							var openai_api_key = "sk-";
-							var settings = {
-								"async" : true,
-								"crossDomain" : true,
-								"url" : "https://api.openai.com/v1/completions",
-								"method" : "POST",
-								"headers" : {
-									"Content-Type" : "application/json",
-									"Authorization" : "Bearer "
-											+ openai_api_key
-								},
-								"data" : JSON.stringify({
-									"model" : "text-davinci-003",
-									"prompt" : userInput,
-									"temperature" : 0.5,
-									"max_tokens" : 2048,
-									"top_p" : 1,
-									"frequency_penalty" : 0,
-									"presence_penalty" : 0,
-									"stop" : [ "#", ";" ],
-								})
-							};
-
-							$
-									.ajax(settings)
-									.done(
-											function(response) {
-												var chatGPTResponse = response.choices[0].text;
-												$(".marro_bot_service_start")
-														.append(
-																"<div id='chat'><div class='marro_bot'><img src='/images/챗봇.png'><p>"
-																		+ chatGPTResponse
-																		+ "</p></div></div>");
-											}).fail(
-											function(jqXHR, textStatus,
-													errorThrown) {
-												console.log(textStatus + ": "
-														+ errorThrown);
-											});
-						}
 
 						//클릭 이벤트
 						$(document).on("click", ".seat_recommendations_btn span",
@@ -145,9 +104,15 @@
 								//ajax
 								readSeatInfoAjax().then(function(response) {
 									//ajax통신에 성공했을 때
-									  var myData = response;
-									  console.log(myData);
-									});
+									var reservedSeatNumList = response;
+									//예매 추천 좌석 리스트 응답받기
+										readAvailableSeatInfoAjax(reservedSeatNumList).then(function(result) {
+											var availableSeatNumList = result; //예매가능좌석리스트
+											console.log(availableSeatNumList);
+											//GPT
+											getChatGPTResponse("사용자는 알파벳을 행으로, 숫자를 열로 갖는 티켓번호를 가진 좌석을 예매합니다. 현재 예매할 수 있는 좌석의 리스트는 "+availableSeatNumList+"이며, 리스트 중에서 "+selectSeatNum+"와 가까운 좌석으로 한 자리 추천해주세요. 알파벳은 소문자로, '선택한 좌석과 가까운 __ 자리를 추천해드립니다!.'식으로 답변해주세요");
+										});
+								});
 						});
 						
 						//좌석 확인 기능
@@ -160,12 +125,12 @@
 
 							$(".marro_bot:last p strong").append("확인하는 좌석을 선택해주세요.");
 							
-							$(".marro_bot_service_start").append(user_input_tag);
+							$(".marro_bot_service_start").append(check_user_input_tag);
 							$(".user-input:last p").append(seatSelectBox);
 
 						});
 						
-						$(document).on("click", ".user-input img", function(e) {
+						$(document).on("click", "#check_seatNum", function(e) {
 							e.preventDefault();
 							//ajax
 							readSeatInfoAjax().then(function(response) {
@@ -178,18 +143,23 @@
 								$.each(reservedSeatNumList, function(index, item) {
 								  if (item === selectSeatNum) { // 예매 불가
 								    found = true;
-								  //예매 불가능 알림 & 자리 추천
-									$(".marro_bot_service_start").append(marrobot_response_tag);
-									$(".marro_bot:last p strong").append("이미 예매된 좌석입니다.<br>대신, 마로봇이 새로운 좌석을 추천해드릴게요!");
+									//예매 불가능 알림 & 자리 추천 - 예매 가능 좌석 리스트 응답받기
+									readAvailableSeatInfoAjax(reservedSeatNumList).then(function(result) {
+										var availableSeatNumList = result; //예매가능좌석리스트
+										console.log(availableSeatNumList);
+										//GPT
+										getChatGPTResponse("사용자는 알파벳을 행으로, 숫자를 열로 갖는 티켓번호를 가진 좌석을 예매합니다. 현재 예매할 수 있는 좌석의 리스트는 "+availableSeatNumList+"이며, 리스트 중에서 "+selectSeatNum+"와 가까운 좌석으로 한 자리 추천해주세요. 알파벳은 소문자로, '선택한 좌석과 가까운 __ 자리를 추천해드립니다!.'식으로 답변해주세요");
+									});
+									
 								    return false;
 								  }
 								});
 								if (!found) { // 예매 가능
 									$(".marro_bot_service_start").append(marrobot_response_tag);
 									$(".marro_bot:last p strong").append("예매가 가능한 좌석입니다!");
+									//봇 응답 종료
 									$(".marro_bot_service_start").append(marrobot_ending_tag);
 								}
-								
 							});
 						});
 						//refresh를 눌렀을 때
@@ -253,7 +223,7 @@
 							  return selectBox;
 							}
 						//좌석정보 ajax 통신
-						function readSeatInfoAjax(callback) {
+						function readSeatInfoAjax() {
 						    //통신에 필요한 변수
 						    var pdateVal = $('input[name=reserveDateInfo]').val();
 						    var pnumberVal = $('input[name=pnumber]').val();
@@ -276,5 +246,68 @@
 						        });
 						    }); // 닫는 괄호 추가
 						}
+						//예매가능좌석 ajax 통신
+						function readAvailableSeatInfoAjax(reservedSeatNumList) {
+						    return new Promise(function(resolve) { // Promise 객체 생성
+						    	console.log(reservedSeatNumList);
+						        //ajax
+						        $.ajax({
+						            url: "/reserve/recommendSeat",
+						            type: "POST",
+						            contentType: "application/json",
+						            data: JSON.stringify({
+						                "reservedSeatNumList": reservedSeatNumList,
+						                "pseatNumber": $('input[name=pseatNumber]').val()
+						            }),
+						            success: function(result) {
+						                resolve(result); // 비동기 처리 결과 값을 반환
+						            }
+						        });
+						    });
+						}
+
+						
+						//GPT 통신
+						function getChatGPTResponse(userInput) {
+							var openai_api_key = "";
+							var settings = {
+								"async" : true,
+								"crossDomain" : true,
+								"url" : "https://api.openai.com/v1/completions",
+								"method" : "POST",
+								"headers" : {
+									"Content-Type" : "application/json",
+									"Authorization" : "Bearer "
+											+ openai_api_key
+								},
+								"data" : JSON.stringify({
+									"model" : "text-davinci-003",
+									"prompt" : userInput,
+									"temperature" : 0.5,
+									"max_tokens" : 2048,
+									"top_p" : 1,
+									"frequency_penalty" : 0,
+									"presence_penalty" : 0,
+									"stop" : [ "#", ";" ],
+								})
+							};
+
+							$
+									.ajax(settings)
+									.done(
+											function(response) {
+												var chatGPTResponse = response.choices[0].text;
+												$(".marro_bot_service_start").append(marrobot_response_tag);
+												$(".marro_bot:last p strong").append("이미 예매된 좌석입니다.<br><br>대신, 마로봇이 예매되지 않은 가까운 좌석을 추천해드릴게요!<br><br>"+chatGPTResponse);
+												//봇 응답 종료
+												$(".marro_bot_service_start").append(marrobot_ending_tag);
+											}).fail(
+											function(jqXHR, textStatus,
+													errorThrown) {
+												console.log(textStatus + ": "
+														+ errorThrown);
+											});
+						}
+
 					});
 </script>

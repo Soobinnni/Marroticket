@@ -91,7 +91,6 @@ public class ReservationController {
 	// 좌석 정보 제공
 	@PostMapping("/readSeatInfo")
 	public ResponseEntity<List<String>> readSeatInfo(@RequestBody ReservationVO vo) throws Exception {
-		System.out.println(vo);
 		List<SeatVO> playReserveList =  getReserveList(getTicketNum(vo.getPdate(), vo.getPnumber(),vo.getPturn(),""));;// 공연 예매된 티켓번호 List
 		List<String> playReserveSeatsNumList = new ArrayList<>();// 좌석번호 List
 		
@@ -99,31 +98,34 @@ public class ReservationController {
 			reserveSeat = reserveSeat.substring((reserveSeat.length() - 2), reserveSeat.length());
 			playReserveSeatsNumList.add(reserveSeat);
 		}
-
-		System.out.println(playReserveSeatsNumList); 
 		
-		ResponseEntity<List<String>> entity = new ResponseEntity<>(playReserveSeatsNumList, HttpStatus.OK);
-		return entity;
+		return new ResponseEntity<>(playReserveSeatsNumList, HttpStatus.OK);
 	}
 	
 	@PostMapping("/recommendSeat")
-	public ResponseEntity<List<String>> recommendSeat(@RequestBody ReservationVO vo) throws Exception {
-		System.out.println(vo);
-		List<SeatVO> playReserveList =  getReserveList(getTicketNum(vo.getPdate(), vo.getPnumber(),vo.getPturn(),""));;// 공연 예매된 티켓번호 List
-		List<String> playReserveSeatsNumList = new ArrayList<>();// 좌석번호 List
-		List<String> playSeatNumList = getSeatNum(Integer.parseInt(vo.getPseatNumber()), 9); //전체 좌석번호
+	public ResponseEntity<List<String>> recommendSeat(@RequestBody Map <String, Object> reservedInfo) throws Exception {
+		List<String> availableSeatNumList = new ArrayList<>();//예매 가능 좌석 리스트
+		List<String> seatNumList = getSeatNum(Integer.parseInt((String) reservedInfo.get("pseatNumber")), 9); //전체 좌석번호
+		List<String> reservedSeatNumList =  (ArrayList<String>) reservedInfo.get("reservedSeatNumList");
 		
-		for (String reserveSeat : getReserveSeats(playReserveList)) {
-			reserveSeat = reserveSeat.substring((reserveSeat.length() - 2), reserveSeat.length());
-			playReserveSeatsNumList.add(reserveSeat);
-		}
-
 		//예매 좌석을 제외한 좌석 	
-		playSeatNumList.removeAll(playReserveSeatsNumList);  // 겹치는 요소만 남기고 삭제
-		System.out.println("예매된 좌석을 제외한 잔여 좌석\n"+playSeatNumList); 
-		
-		ResponseEntity<List<String>> entity = new ResponseEntity<>(playSeatNumList, HttpStatus.OK);
-		return entity;
+		seatNumList.removeAll(reservedSeatNumList);  // 겹치는 요소만 남기고 삭제
+		availableSeatNumList = seatNumList;
+		System.out.println(availableSeatNumList);
+				
+		return new ResponseEntity<>(availableSeatNumList, HttpStatus.OK);
+	}
+	
+	@PostMapping("/example")
+	public String handleExampleRequest(@RequestBody Map<String, Object> data) {
+	    String name = (String) data.get("name");
+	    int age = (int) data.get("age");
+	    String email = (String) data.get("email");
+	    List<String> hobbies = (List<String>) data.get("hobbies");
+
+	    // do something with the data
+
+	    return "success";
 	}
 	
 	@PostMapping("/remainSeatsNumSuggestion")
