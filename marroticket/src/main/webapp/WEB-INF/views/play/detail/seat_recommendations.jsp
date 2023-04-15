@@ -12,11 +12,11 @@
 				</strong>
 			</p>
 			<div style="margin-top: 20px;">
-				<span class="recommendSeatsNum"
-					style='cursor: pointer; display: inline-block; border-radius: 5px; background-color: #EB0000; min-width: 30px; height: 25px; color: white; padding: 4px 8px 0;'
-					align="center"><strong>좌석 추천</strong></span> <span class="checkSeatsNum"
-					style='cursor: pointer; display: inline-block; border-radius: 5px; background-color: #d9d9d9; min-width: 30px; height: 25px; color: black; padding: 4px 8px 0;'
-					align="center"><strong>좌석 예매 정보 확인</strong></span>
+				<span><button type='button' class="recommendSeatsNum" value='recommend'
+					style='cursor: pointer; display: inline-block; font-size:18px; border-radius: 5px; background-color: #d9d9d9; min-width: 30px; height: 35px; color: black; padding: 0 8px;'
+					align="center"><strong>좌석 추천</strong></button></span> <span><button type='button' class="checkSeatsNum" value='check'
+					style='cursor: pointer; display: inline-block; font-size:18px; border-radius: 5px; background-color: #d9d9d9; min-width: 30px; height: 35px; color: black; padding: 0 8px;'
+					align="center"><strong>좌석 예매 정보 확인</strong></button></span>
 			</div>
 		</div>
 		<div class="clear"></div>
@@ -38,37 +38,42 @@ $(document)
 
 		//숨기기
 		$(".seat_recommendations").hide();
+		//나타내기
+		$(document).on("click", ".seat_recommendations_btn span",
+				function(e) {
+					e.preventDefault();
+					$(".recommendSeatsNum").attr("disabled", false);
+					$(".checkSeatsNum").attr("disabled", false);
+					$("#check_seatNum").attr("disabled", false);
+					$(".seat_recommendations").show();
+					$(".recommendSeatsNum").animate({ opacity: 0 }, 400, function() {
+						$(this).animate({ opacity: 1 }, 900);
+					});
+					$(".checkSeatsNum").animate({ opacity: 0 }, 400, function() {
+						$(this).animate({ opacity: 1 }, 900);
+					});
+
+					$('.play_reserve_seat').css({
+						'padding': '15px 0 10px 20px'
+					});
+				});
 
 		//마로봇 응답
 		var marrobot_response_tag = '<div class="marro_bot" style="margin-top:30px;margin-bottom:10px;"><img src="/images/챗봇.png"><p><strong></strong></p><div class="clear"></div>';
 
 		//사용자 응답
-		var check_user_input_tag = "<div class='user-input'><p></p><img id='check_seatNum' src='/images/send.png'></div><div class='clear'></div>"; //예매확인
-		var recommend_user_input_tag = "<div class='user-input'><p></p><img id='recommend_seatNum' src='/images/send.png'></div><div class='clear'></div>"; //좌석추천
+		var check_user_input_tag = "<div class='user-input'><p></p><button type='button' id='check_seatNum'><img src='/images/send.png'></button></div><div class='clear'></div>"; //예매확인
 
 		//종료 응답
 		var marrobot_ending_tag = "<div><img src='/images/마로티켓 로고 2.png' style='display:block; margin:0 auto; padding-top:30px; width:120px;'><img src='/images/refresh.png' style='display:block; margin:0 auto; padding-top:10px; width:35px; cursor:pointer' class='marrobot_ending_tag'></div>";
 
-		//클릭 이벤트
-		$(document).on("click", ".seat_recommendations_btn span",
-			function(e) {
-				e.preventDefault();
-				$(".seat_recommendations").show();
-				$(".recommendSeatsNum").animate({ opacity: 0 }, 400, function() {
-					$(this).animate({ opacity: 1 }, 900);
-				});
-				$(".checkSeatsNum").animate({ opacity: 0 }, 400, function() {
-					$(this).animate({ opacity: 1 }, 900);
-				});
-
-				$('.play_reserve_seat').css({
-					'padding': '15px 0 10px 20px'
-				});
-			});
-
+		
 		//좌석 추천 기능
 		$(document).on("click", ".recommendSeatsNum", function(e) {
 			e.preventDefault();
+			chatTypeCount($(this).val());
+			$(".recommendSeatsNum").attr("disabled", true);
+			$(".checkSeatsNum").attr("disabled", true);
 			//ajax
 			readSeatInfoAjax().then(function(response) {
 				//ajax통신에 성공했을 때
@@ -89,6 +94,9 @@ $(document)
 		//좌석 확인 기능
 		$(document).on("click", ".checkSeatsNum", function(e) {
 			e.preventDefault();
+			chatTypeCount($(this).val());
+			$(".recommendSeatsNum").attr("disabled", true);
+			$(".checkSeatsNum").attr("disabled", true);
 			$(this).disabled = false;
 			$(".marro_bot_service_start").append(marrobot_response_tag);
 			var seatNumbers = generateSeatNumbers($('input[name=pseatNumber]').val());
@@ -103,6 +111,7 @@ $(document)
 
 		$(document).on("click", "#check_seatNum", function(e) {
 			e.preventDefault();
+			$("#check_seatNum").attr("disabled", true);
 			//ajax
 			readSeatInfoAjax().then(function(response) {
 				//ajax통신에 성공했을 때
@@ -143,6 +152,9 @@ $(document)
 		//refresh를 눌렀을 때
 		$(document).on("click", ".marrobot_ending_tag", function(e) {
 			e.preventDefault();
+			$(".recommendSeatsNum").attr("disabled", false);
+			$(".checkSeatsNum").attr("disabled", false);
+			$("#check_seatNum").attr("disabled", false);
 			$('.marro_bot_service_start').empty();
 			$(".recommendSeatsNum").animate({ opacity: 0 }, 400, function() {
 				$(this).animate({ opacity: 1 }, 900);
@@ -151,9 +163,23 @@ $(document)
 				$(this).animate({ opacity: 1 }, 900);
 			});
 		});
+		
+		//chat button click count update
+		function chatTypeCount(type){				
+			//ajax
+			$.ajax({
+				url: "/chat/saveType",
+				type: "POST",
+				contentType: "application/json",
+				data: JSON.stringify({
+					"type": type
+				}),
+				success: function(result) {
+					console.log(result); 
+				}
+			});
+		}
 
-
-		//함수
 		function generateSeatNumbers(numSeats) {
 			var alphabet = "abcdefghijklmnopqrstuvwxyz";
 			let seatNumbers = [];

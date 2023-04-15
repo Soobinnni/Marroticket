@@ -295,7 +295,7 @@ $(document)
 						});
 			});
 			$(document).on("click", ".event", function() {
-				$('.marro_bot_service_start').empty();
+				botServiceStart();
 				$(".seat_recommendations").hide();
 				$('.event').css({
 					'background-color': 'white',
@@ -330,7 +330,7 @@ $(document)
 			$(document).on("click", "#play_time_btn_first", function() {
 				$(".seat_recommendations").hide();
 				$('#turnInfoHidden').empty();
-				$('.marro_bot_service_start').empty();
+				botServiceStart();
 				$("#turnInfoHidden").append("<input type='hidden' name='turnInfo' value=1 />");
 				$('#play_time_btn_first').css({
 					'border': '1px black solid'
@@ -344,7 +344,7 @@ $(document)
 			});
 			$(document).on("click", "#play_time_btn_second", function() {
 				$('#turnInfoHidden').empty();
-				$('.marro_bot_service_start').empty();
+				botServiceStart();
 				$(".seat_recommendations").hide();
 				$("#turnInfoHidden").append("<input type='hidden' name='turnInfo' value=2 />");
 				$('#play_time_btn_second').css({
@@ -366,7 +366,7 @@ $(document)
 
 
 				$('#reserveDateInfoHidden').empty();
-				$('.marro_bot_service_start').empty();
+				botServiceStart();
 				$("#reserveDateInfoHidden").append('<input type="hidden" name="reserveDateInfo" value="' + href.slice(-8) + '">');
 
 				var pnumberVal = $('input[name=pnumber]').val(); //공연번호
@@ -465,4 +465,11 @@ $(document)
 				$("#reserveInfoForm").attr("method", "POST"); //임시 end
 				$("#reserveInfoForm").submit();
 			});
+			
+			function botServiceStart(){
+				$('.marro_bot_service_start').empty();
+				$(".recommendSeatsNum").attr("disabled", false);
+				$(".checkSeatsNum").attr("disabled", false);
+				$("#check_seatNum").attr("disabled", false);
+			}	
 		});
