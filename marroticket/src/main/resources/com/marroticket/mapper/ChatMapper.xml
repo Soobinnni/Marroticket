@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.marroticket.mapper.ChatMapper">
-	<!-- 공지사항 등록 처리 -->
+	<resultMap
+		type="com.marroticket.chat.domain.ChatVO" id="chat">
+		<id property="chatNumber" column="chat_number" />
+		<result property="uid" column="u_id" />
+		<result property="chatRecommend" column="chat_recommend" />
+		<result property="chatCheck" column="chat_check" />
+	</resultMap>
+	<!-- 챗 유형 저장 -->
 	<insert id="saveType">
 		INSERT INTO chat
 		(
@@ -16,4 +23,13 @@
 			#{uid}, #{chatRecommend}, #{chatCheck}
 		)
 	</insert>
+	<!-- 챗 유형 count -->
+	<select id="getChatCounts" resultType="java.util.Map">
+	  SELECT
+	    COUNT(*) AS totalCount,
+	    SUM(chat_check) AS checkCount,
+	    SUM(chat_recommend) AS recommendCount,
+	    COUNT(CASE WHEN u_id = '비회원' THEN 0 END) AS nonmemberCount
+	  FROM chat
+	</select>
 </mapper>

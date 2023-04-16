@@ -378,6 +378,12 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/admin/notice/{1}.jsp" />
 	</definition>
+	<!-- 관리자의 chat관리 -->
+	<definition name="chat.*" extends="admin-template">
+		<put-attribute name="title" value="마로티켓 마로봇" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/admin/chat/{1}.jsp" />
+	</definition>
 
 	<!-- 예매 과정 레이아웃 -->
 	<!-- reserve-select-template -->
