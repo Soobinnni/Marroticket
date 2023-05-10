@@ -37,7 +37,7 @@
 			<p>공지사항 게시판</p>
 			<p>
 				<a class="btn btn-default" href="/notice/noticeList?accept=admin"
-					role="button"> 바로가기>> &raquo;</a>
+					role="button"> 바로가기 &raquo;</a>
 			</p>
 		</div>
 		<div class="col-xs-6 col-lg-4">
@@ -46,7 +46,7 @@
 			<p>사용자 FAQ 게시판</p>
 			<p>
 				<a class="btn btn-default" href="/ufaq/ufaqList?accept=admin"
-					role="button"> 바로가기>> &raquo;</a>
+					role="button"> 바로가기 &raquo;</a>
 			</p>
 		</div>
 		<div class="col-xs-6 col-lg-4">
@@ -56,7 +56,18 @@
 				<p>극단 FAQ 게시판</p>
 				<p>
 					<a class="btn btn-default" href="/tfaq/tfaqList?accept=admin"
-						role="button"> 바로가기>> &raquo;</a>
+						role="button"> 바로가기 &raquo;</a>
+				</p>
+			</div>
+		</div>
+		<div class="col-xs-6 col-lg-4">
+
+			<div>
+				<h2>마로봇 관리</h2>
+				<p>마로봇 통계</p>
+				<p>
+					<a class="btn btn-default" href="/chat/readStatistics"
+						role="button"> 바로가기 &raquo;</a>
 				</p>
 			</div>
 		</div>

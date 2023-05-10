@@ -11,6 +11,7 @@ drop table tmember purge;
 drop table tfaq purge;
 drop table ufaq purge;
 drop table notice purge;
+drop table chat purge;
 
 --시퀀스 삭제
 drop sequence notice_seq;
@@ -21,6 +22,7 @@ drop sequence play_seq;
 drop sequence reservation_seq;
 drop sequence tmember_seq;
 drop sequence umember_seq;
+drop sequence chat_seq;
 
 --일반 회원 테이블
 create table UMEMBER(
@@ -227,6 +229,18 @@ last_used DATE NOT NULL,
 PRIMARY KEY (series)
 );
 
+--chat table
+create table CHAT(
+    chat_number number(5)NOT NULL primary KEY ,--chat 시퀀스번호
+    u_id VARCHAR2(20),--회원 아이디
+    chat_recommend NUMBER(1),--자리 추천
+    chat_check NUMBER(1)--예매 여부 확인
+);
+--chat sequence
+create sequence CHAT_seq
+start with 1
+increment by 1;
+
 -- 시퀀스 번호 넘어가는 오류 방지
 alter sequence notice_seq nocache;
 alter sequence tfaq_seq nocache;
@@ -236,3 +250,4 @@ alter sequence play_seq nocache;
 alter sequence reservation_seq nocache;
 alter sequence tmember_seq nocache;
 alter sequence umember_seq nocache;
+alter sequence chat_seq nocache;

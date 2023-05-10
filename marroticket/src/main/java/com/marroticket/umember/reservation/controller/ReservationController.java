@@ -86,6 +86,35 @@ public class ReservationController {
 
 		return entity;
 	}
+	
+	//마로티켓 봇 기능
+	// 좌석 정보 제공
+	@PostMapping("/readSeatInfo")
+	public ResponseEntity<List<String>> readSeatInfo(@RequestBody ReservationVO vo) throws Exception {
+		List<SeatVO> playReserveList =  getReserveList(getTicketNum(vo.getPdate(), vo.getPnumber(),vo.getPturn(),""));;// 공연 예매된 티켓번호 List
+		List<String> playReserveSeatsNumList = new ArrayList<>();// 좌석번호 List
+		
+		for (String reserveSeat : getReserveSeats(playReserveList)) {
+			reserveSeat = reserveSeat.substring((reserveSeat.length() - 2), reserveSeat.length());
+			playReserveSeatsNumList.add(reserveSeat);
+		}
+		
+		return new ResponseEntity<>(playReserveSeatsNumList, HttpStatus.OK);
+	}
+	
+	@PostMapping("/recommendSeat")
+	public ResponseEntity<List<String>> recommendSeat(@RequestBody Map <String, Object> reservedInfo) throws Exception {
+		List<String> availableSeatNumList = new ArrayList<>();//예매 가능 좌석 리스트
+		List<String> seatNumList = getSeatNum(Integer.parseInt((String) reservedInfo.get("pseatNumber")), 9); //전체 좌석번호
+		List<String> reservedSeatNumList =  (ArrayList<String>) reservedInfo.get("reservedSeatNumList");
+		
+		//예매 좌석을 제외한 좌석 	
+		seatNumList.removeAll(reservedSeatNumList);  // 겹치는 요소만 남기고 삭제
+		availableSeatNumList = seatNumList;
+		System.out.println(availableSeatNumList);
+				
+		return new ResponseEntity<>(availableSeatNumList, HttpStatus.OK);
+	}
 
 	@PreAuthorize("hasRole('ROLE_UMEMBER')")
 	@PostMapping("/book")
@@ -292,6 +321,20 @@ public class ReservationController {
 	private List<SeatVO> getReserveList(String ticketNum) throws Exception {
 		List<SeatVO> reserveList = reserveService.list(ticketNum);
 		return reserveList;
+	}
+	
+	// 좌석 번호 생성
+	private List<String> getSeatNum(int numSeats, int numColumns) { //좌석 수, 열 개수
+		List<String> seatNums = new ArrayList<>();
+		
+		for (int i = 1; i <= numSeats; i++) {
+		    int row = (i - 1) / numColumns + 1;
+		    int col = (i - 1) % numColumns + 1;
+		    char seatRow = (char) ('a' + row - 1);
+		    String seatNum = String.format("%c%d", seatRow, col);
+		    seatNums.add(seatNum);
+		}
+		return seatNums;
 	}
 
 	// 예매 좌석 카운트

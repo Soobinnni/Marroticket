@@ -295,6 +295,8 @@ $(document)
 						});
 			});
 			$(document).on("click", ".event", function() {
+				botServiceStart();
+				$(".seat_recommendations").hide();
 				$('.event').css({
 					'background-color': 'white',
 					'color': 'black'
@@ -326,7 +328,9 @@ $(document)
 				});
 			});
 			$(document).on("click", "#play_time_btn_first", function() {
+				$(".seat_recommendations").hide();
 				$('#turnInfoHidden').empty();
+				botServiceStart();
 				$("#turnInfoHidden").append("<input type='hidden' name='turnInfo' value=1 />");
 				$('#play_time_btn_first').css({
 					'border': '1px black solid'
@@ -336,9 +340,12 @@ $(document)
 					'margin-top': '10px'
 				});
 				$('.play_seat_remain').html($('input[name=firstTimeSeatInfo]').val());
+				$('.seat_recommendations_btn').html('<img src="/images/챗봇셀렉.png" width="20px" style="margin-top:6px;"><span style="cursor:pointer;color:#EB0000;font-weight:bold;font-size:15px;">마로봇 이용하기 ▼</span>');
 			});
 			$(document).on("click", "#play_time_btn_second", function() {
 				$('#turnInfoHidden').empty();
+				botServiceStart();
+				$(".seat_recommendations").hide();
 				$("#turnInfoHidden").append("<input type='hidden' name='turnInfo' value=2 />");
 				$('#play_time_btn_second').css({
 					'border': '1px black solid',
@@ -348,6 +355,7 @@ $(document)
 					'border': '#ecedf2 solid 1px'
 				});
 				$('.play_seat_remain').html($('input[name=secondTimeSeatInfo]').val());
+				$('.seat_recommendations_btn').html('<img src="/images/챗봇셀렉.png" width="20px" style="margin-top:6px;"><span class="" style="cursor:pointer;color:#EB0000;font-weight:bold;font-size:15px;">마로봇 이용하기 ▼</span>');
 			});
 
 
@@ -358,6 +366,7 @@ $(document)
 
 
 				$('#reserveDateInfoHidden').empty();
+				botServiceStart();
 				$("#reserveDateInfoHidden").append('<input type="hidden" name="reserveDateInfo" value="' + href.slice(-8) + '">');
 
 				var pnumberVal = $('input[name=pnumber]').val(); //공연번호
@@ -405,7 +414,8 @@ $(document)
 						//1회차 좌석 정보(예매가능좌석수)
 						$(".play_time").html("1회차 " + $('input[name=pfirstStartTime]').val());
 						$('.play_seat_remain').html(result["first"]);
-
+						$('.seat_recommendations_btn').html('<img src="/images/챗봇셀렉.png" width="20px" style="margin-top:6px;"><span style="cursor:pointer;color:#EB0000;font-weight:bold;font-size:15px;">마로봇 이용하기 ▼</span>');
+				
 						switch (result["second"]) {
 							case 100:
 								console.log("2회차 공연이 없음");
@@ -455,4 +465,11 @@ $(document)
 				$("#reserveInfoForm").attr("method", "POST"); //임시 end
 				$("#reserveInfoForm").submit();
 			});
+			
+			function botServiceStart(){
+				$('.marro_bot_service_start').empty();
+				$(".recommendSeatsNum").attr("disabled", false);
+				$(".checkSeatsNum").attr("disabled", false);
+				$("#check_seatNum").attr("disabled", false);
+			}	
 		});
