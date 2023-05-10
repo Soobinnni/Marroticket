@@ -273,6 +273,7 @@ $(document)
 
 		//GPT 통신
 		function getChatGPTResponse(userInput) {
+			var openai_api_key = "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";
 			var settings = {
 				"async": true,
 				"crossDomain": true,

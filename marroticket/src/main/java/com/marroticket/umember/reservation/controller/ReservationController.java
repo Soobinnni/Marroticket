@@ -115,23 +115,6 @@ public class ReservationController {
 				
 		return new ResponseEntity<>(availableSeatNumList, HttpStatus.OK);
 	}
-	
-	@PostMapping("/example")
-	public String handleExampleRequest(@RequestBody Map<String, Object> data) {
-	    String name = (String) data.get("name");
-	    int age = (int) data.get("age");
-	    String email = (String) data.get("email");
-	    List<String> hobbies = (List<String>) data.get("hobbies");
-
-	    // do something with the data
-
-	    return "success";
-	}
-	
-	@PostMapping("/remainSeatsNumSuggestion")
-	public String remainSeatsNumSuggestion(String pdate, String pnum, String pturn) {
-		return null;
-	}
 
 	@PreAuthorize("hasRole('ROLE_UMEMBER')")
 	@PostMapping("/book")
