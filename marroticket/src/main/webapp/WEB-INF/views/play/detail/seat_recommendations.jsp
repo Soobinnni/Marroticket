@@ -1,114 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<<<<<<< HEAD
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link
-	href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
-	rel="stylesheet">
-<div class="seat_recommendations">
-	<div class="content_seat_recommendations">
-		<div class="header_seat_recommendations">마로티켓 좌석추천</div>
-		<div id="chat">
-			<div class="marro_bot">
-				<img src="/images/챗봇.png">
-				<p>
-					안녕하세요!<br>마로티켓 좌석추천 서비스입니다.<br>좌석을 추천받기 위해선 관람일을 먼저
-					입력해야합니다.
-				</p>
-			</div>
-			<!-- 문의하시는 서비스를 선택해주세요! -->
-			<div class="marro_bot_select_month"></div>
-		</div>
-		<div class="clear"></div>
-		<!-- -->
-		<form>
-			<label for="user-input">고객 :</label> <input type="text"
-				id="user-input"
-				value="예약 좌석중에 A열 마감, B열 마감, C열 3개 잔여, D열 13개 잔여가 남아 있는 상황 입니다. 남은 열의 좌석중에서 자리를 추천해주세요.">
-			<button type="submit">질문하기</button>
-		</form>
-
-	</div>
-</div>
-<script>
-	$(document)
-			.ready(
-					function() {
-						//시작일
-						var pstartDate = new Date($('#pstartDate').text()
-								.substring(0, 4), '0'+($('#pstartDate').text()
-								.substring(6, 7)-1),  $('#pstartDate').text()
-								.substring(8, 10)); 
-								//종료일
-						var pcloseDate = new Date($('#pcloseDate').text()
-								.substring(0, 4), '0'+($('#pcloseDate').text()
-								.substring(6, 7)-1),  $('#pcloseDate').text()
-								.substring(8, 10)); 
-								console.log(pcloseDate);
-								
-						//페이지가 준비되면, 월을 선택하도록 선택지를 준다.
-						//'조건 1 : 상연일이 미래'
-						//'조건 2 : 상연시작일이 과거 혹은 현재'
-						$("form")
-								.submit(
-										function(event) {
-											event.preventDefault();
-											var userInput = $("#user-input")
-													.val();
-											$("#user-input").val("");
-											$("#chat")
-													.append(
-															"<div class='q_seat_recommendations' style='display:inline-block;float:right;'><p>고객: "
-																	+ userInput
-																	+ "</p></div>");
-											getChatGPTResponse(userInput);
-										});
-
-						function getChatGPTResponse(userInput) {
-							var openai_api_key = "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";
-							var settings = {
-								"async" : true,
-								"crossDomain" : true,
-								"url" : "https://api.openai.com/v1/completions",
-								"method" : "POST",
-								"headers" : {
-									"Content-Type" : "application/json",
-									"Authorization" : "Bearer "
-											+ openai_api_key
-								},
-								"data" : JSON.stringify({
-									"model" : "text-davinci-003",
-									"prompt" : userInput,
-									"temperature" : 0.5,
-									"max_tokens" : 2048,
-									"top_p" : 1,
-									"frequency_penalty" : 0,
-									"presence_penalty" : 0,
-									"stop" : [ "#", ";" ],
-								})
-							};
-
-							$
-									.ajax(settings)
-									.done(
-											function(response) {
-												var chatGPTResponse = response.choices[0].text;
-												$("#chat")
-														.append(
-																"<div id='chat'><div class='marro_bot'><img src='/images/챗봇.png'><p>"
-																		+ chatGPTResponse
-																		+ "</p></div></div>");
-											}).fail(
-											function(jqXHR, textStatus,
-													errorThrown) {
-												console.log(textStatus + ": "
-														+ errorThrown);
-											});
-						}
-					});
-=======
 <div class="content_seat_recommendations">
 	<div id="chat">
 		<div class="marro_bot">
@@ -194,7 +85,6 @@ $(document)
 					//GPT
 					var chatGPTRequest = "모든 좌석은 알파벳 순의 열을, 오름차순의 행을 가지고 있습니다. 좌석은 좌석번호의 알파벳이 작을수록 무대와 가깝고 좌석번호의 숫자가 " + colNum + "의 평균과 가까울수록 중앙에 위치합니다. 현재 예매할 수 있는 좌석의 리스트는 " + availableSeatNumList + " 입니다.";
 					chatGPTRequest += "대답은 리스트 좌석번호 가운데 '중앙에 가까운 좌석번호로 ___를 추천하고, 무대와 가장 가까운 좌석은 _열의 ___들을 추천합니다!'라고 사용자에게 추천합니다.(알파벳은 소문자로 표현합니다)";
-					console.log(chatGPTRequest);
 					getChatGPTResponse(chatGPTRequest);
 				});
 			});
@@ -240,7 +130,6 @@ $(document)
 							chatGPTRequest += "'" + availableSeatNumList + "'남은 좌석중에서 좌석1개를 추천하며 뒤의 조건을 따릅니다. ";
 							chatGPTRequest += "첫째 "+selectSeatNum+"과 알파벳이 같은 좌석 또는 둘째 남은 좌석에서 같은 알파벳이 존재하지 않으면 "+selectSeatNum+"과 알파벳의 순서가 가장 가까운 좌석";
 
-							console.log(chatGPTRequest);
 							//GPT
 							$(".marro_bot_service_start").append(marrobot_response_tag);
 							$(".marro_bot:last p strong").append("이미 예매된 좌석입니다.<br><br>대신, 마로봇이 예매되지 않은 가까운 좌석을 추천해드릴게요!<br><br>");
@@ -362,7 +251,7 @@ $(document)
 		//예매가능좌석 ajax 통신
 		function readAvailableSeatInfoAjax(reservedSeatNumList) {
 			return new Promise(function(resolve) { // Promise 객체 생성
-				console.log(reservedSeatNumList);
+				
 				//ajax
 				$.ajax({
 					url: "/reserve/recommendSeat",
@@ -382,7 +271,7 @@ $(document)
 
 		//GPT 통신
 		function getChatGPTResponse(userInput) {
-			var openai_api_key = "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";
+			var openai_api_key = "${chatApiKey}";
 			var settings = {
 				"async": true,
 				"crossDomain": true,
@@ -423,5 +312,4 @@ $(document)
 		}
 
 	});
->>>>>>> bot
 </script>

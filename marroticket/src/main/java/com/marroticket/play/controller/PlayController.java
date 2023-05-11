@@ -31,6 +31,9 @@ public class PlayController {
 
 	@Value("${upload.path}")
 	private String uploadPath;
+	
+	@Value("${apikey.chat}")
+	private String chatApiKey;
 
 	@Autowired
 	private PlayService playService;
@@ -78,8 +81,10 @@ public class PlayController {
 		//장르 정보 set
 		play.setPgenre(genreSet(play));
 		System.out.println(play);
-		
+
 		model.addAttribute("play", play);
+		model.addAttribute("chatApiKey", chatApiKey);
+		
 		return "playDetail";
 	}
 

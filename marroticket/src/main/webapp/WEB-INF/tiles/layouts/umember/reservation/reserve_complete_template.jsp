@@ -12,7 +12,6 @@
 <!-- jQuery -->
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="/js/reserve.js"></script>
 <!-- css -->
 <link rel="stylesheet" type="text/css" href="/css/reserve.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
